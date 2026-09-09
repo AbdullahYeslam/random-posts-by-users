@@ -1,0 +1,177 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users Posts</title>
+    <!-- <script src="./node_modules/axios/dist/axios.min.js"></script> -->
+  </head>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous"
+  />
+  <style>
+    body {
+      background-color: #8f7557;
+    }
+    #container {
+      background-color: #8f7557;
+      display: flex;
+      justify-content: space-between;
+      margin: 10px;
+    }
+    #uesers {
+      width: auto;
+      background-color: #c6c6c61f;
+    }
+    #card {
+      padding: 15px;
+      text-align: center;
+    }
+    .userName {
+      font-size: 25px;
+      height: 50px;
+      text-decoration: underline;
+      font-family: fantasy;
+      margin-bottom: 2px;
+      color: rgb(32 39 46);
+    }
+    .email {
+      font-family: inherit;
+      font-size: small;
+      color: rgb(77 11 28);
+    }
+    #button {
+      background: rgb(204 173 159);
+      color: rgb(78, 57, 21);
+      width: 110px;
+      height: 40px;
+      border: 2px solid rgb(65, 26, 26);
+      border-radius: 15%;
+      cursor: pointer;
+      box-shadow: 4px 5px 10px rgb(65, 26, 26);
+      outline: none;
+      transition:
+        background 2s,
+        border-radius 0.3s;
+    }
+    #button:focus {
+      background: #8f7557;
+      border-radius: 50%;
+    }
+    .card-body {
+      border-bottom: 1px solid;
+    }
+    #posts {
+      width: auto;
+    }
+    #contentPost {
+      background-color: rgb(204 173 159);
+      border-color: #2c0c0c;
+      border-radius: 15px;
+      margin: 10px;
+    }
+    #title {
+      text-align: center;
+      font-size: 25px;
+      font-family: fantasy;
+      font-weight: bolder;
+      padding: 5px;
+      color: #4c111e;
+      height: auto;
+      border-bottom: 1px solid;
+    }
+    #content {
+      font-family: fantasy;
+      font-size: 20px;
+      color: darkred;
+    }
+    #subContainer {
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+
+  <script src="./node_modules/axios/dist/axios.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+
+  <body>
+    <div class="container" id="container">
+      <!--the whole page-->
+      <div id="subContainer">
+        <!--this contain both users and posts-->
+        <div id="uesers">
+          <!--this container of users -->
+          <div class="card-body" id="card">
+            <h1 id="userName" class="userName"></h1>
+            <p class="email"></p>
+            <!-- <button type="button" id="button" onclick = getPosts(${user.id})>show posts</button> -->
+          </div>
+        </div>
+        <div class="" id="posts">
+          <!--this container of posts-->
+          <h2 id="title">
+            Hi there! <br />
+            press any button (show posts) <br />
+            to see all posts belong to the one you choose
+          </h2>
+          <!--later in js, it is going to change like this:-->
+          <!--
+              <div class="card" id="post"> 
+                <div class="card-body" id="contentPost">
+                    <h2 id="title">Hi there! </h2>
+                    <p id="content">press any button (show post) to show all posts belong to the one you choose </p>
+                </div>
+              </div>
+            -->
+        </div>
+      </div>
+    </div>
+    <!--the whole page-->
+  </body>
+
+  <script>
+    function getUsersUsingAxions() {
+      axios
+        .get("https://jsonplaceholder.typicode.com/users")
+        .then((response) => {
+          // in axios, no need to check the status of the requast. alredy checked!
+          users = response.data;
+          document.getElementById("uesers").innerHTML = "";
+          for (user of users) {
+            let content = `
+                <div class="card-body" id="card" >
+                    <h1 id="userName" class="userName">${user.name}</h1>
+                    <p class="email">${user.email}</p>
+                    <button type="button" id="button" onclick = getPostsUsingAxios(${user.id})>show posts</button>
+                </div>`;
+            document.getElementById("uesers").innerHTML += content;
+          }
+        })
+        .catch((error) => {
+          alert("There is error" + error);
+        });
+    }
+
+    function getPostsUsingAxios(user) {
+      axios
+        .get(`https://jsonplaceholder.typicode.com/posts?userId=${user}`)
+        .then((respone) => {
+          posts = respone.data;
+          document.getElementById("posts").innerHTML = "";
+          for (post of posts) {
+            let content = `
+                  <!--this container of the post-->
+                      <div class="card-body" id="contentPost">
+                          <h2 id="title">${post.title}</h2>
+                          <p id="content">${post.body}</p>
+                       </div>
+                   `;
+            document.getElementById("posts").innerHTML += content;
+          }
+        });
+    }
+    getUsersUsingAxions();
+  </script>
+</html>
